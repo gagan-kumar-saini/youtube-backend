@@ -5,9 +5,7 @@ import {OpenAI} from 'openai';
 import { User } from "../models/user.model.js";
 import{GoogleGenerativeAI,HarmCategory, HarmBlockThreshold} from "@google/generative-ai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPEN_AI_KEY
-});
+
 
 const apiKey = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
@@ -20,28 +18,28 @@ const llamaGenerate = asyncHandler(async (req, res) => {
   try {
     const { userResponse, userId } = req.body;
 
-    if (!userResponse || !userId) {
-      return res.status(400).json({ error: "User response and user ID are required" });
-    }
-    const prompt = `
-      Here is an essay written by the user: "${userResponse.replace(/"/g, "'")}"
-      Task: 
-      - Find and highlight grammatical, spelling, or punctuation mistakes.
-      - Provide corrections and suggestions for improvement.
-      - Rate the essay out of 10 based on grammar, structure, and clarity.
-      - Give brief feedback on how to improve the essay overall.
-    `;
+    // if (!userResponse || !userId) {
+    //   return res.status(400).json({ error: "User response and user ID are required" });
+    // }
+    // const prompt = `
+    //   Here is an essay written by the user: "${userResponse.replace(/"/g, "'")}"
+    //   Task: 
+    //   - Find and highlight grammatical, spelling, or punctuation mistakes.
+    //   - Provide corrections and suggestions for improvement.
+    //   - Rate the essay out of 10 based on grammar, structure, and clarity.
+    //   - Give brief feedback on how to improve the essay overall.
+    // `;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [ { role: "system", content: prompt}]
-    });
+    // const completion = await openai.chat.completions.create({
+    //   model: "gpt-4o",
+    //   messages: [ { role: "system", content: prompt}]
+    // });
 
-    return res.status(200).json({
-      status: 200,
-      data: completion.data.choices[0].message.content,
-      message: "Content generated successfully"
-    });
+    // return res.status(200).json({
+    //   status: 200,
+    //   data: completion.data.choices[0].message.content,
+    //   message: "Content generated successfully"
+    // });
 
   } catch (error) {
     console.error("Error:", error.response?.data || error.message);
@@ -56,13 +54,7 @@ const googleGenerativeAI = asyncHandler(async (req, res) => {
  
     const { userResponse } = req.body;
         const prompt = `
-        Here is an essay written by the user: "${userResponse}
-        Task:
-        - Find and highlight grammatical, spelling, or punctuation mistakes.
-        - Provide corrections and suggestions for improvement.
-        - Rate the essay out of 10 based on grammar, structure, and clarity.
-        - Give brief feedback on how to improve the essay overall.
-        - Provide a rewritten version of the essay with corrections and suggestions applied.
+      ${userResponse}
         `;
         const generationConfig = {
           temperature: 1,
